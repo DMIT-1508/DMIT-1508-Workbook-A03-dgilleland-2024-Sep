@@ -1,6 +1,10 @@
-# DMIT-1508 - **Student Workbook** (Sep 2023)
+# DMIT-1508 - ***Instructor* Workbook** (Sep 2024)
 
-> **STUDENT_NAME** - Place your name in this line.
+> **Dan Gilleland** - Place your name in this line.
+
+## Schedule
+ 
+> See the [Agenda](./Agenda.md) for details on upcoming and completed topics.
 
 ## Inside this repository
 
