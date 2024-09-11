@@ -42,7 +42,9 @@
 ### Sep 11
 
 - [ ] Normalization & ERDs
-  - [ ] Demo - ESP 2
+  - [ ] Demos
+    - [ ] [ESP 2](https://dmit-1508.github.io/demos/esp/specs/ESP-2-Specs.html)
+    - [ ] [ESP 3](https://dmit-1508.github.io/demos/esp/specs/ESP-3-Specs.html)
     - Analyze a form to identify metadata (0NF) and create a list of the metadata
     - Remove repeating groups, if any, by isolating them into their own distinct entity (1NF) (while maintaining relationships)
     - Check for partial dependencies, if any (2NF)
