@@ -41,7 +41,7 @@
 
 ### Sep 11
 
-- [ ] Normalization & ERDs
+- [ ] Normalization
   - [ ] Demos
     - [ ] [ESP 2](https://dmit-1508.github.io/demos/esp/specs/ESP-2-Specs.html)
     - [ ] [ESP 3](https://dmit-1508.github.io/demos/esp/specs/ESP-3-Specs.html)
@@ -53,6 +53,24 @@
   - [ ] Practice/Homework
     - [ ] Joe's Videos View 1
     - [ ] Memories Forever
+
+### Sep 12
+
+- [ ] Normalization
+  - [ ] Finish [ESP 3](https://dmit-1508.github.io/demos/esp/specs/ESP-3-Specs.html)
+
+----
+
+### Sep 16
+
+- [ ] Normalization
+  - [ ] Solutions to [ESP 4](https://dmit-1508.github.io/demos/esp/specs/ESP-4.html) and [ESP 5](https://dmit-1508.github.io/demos/esp/specs/ESP-5.html)
+
+### Sep 18
+
+- [ ] ERDs
+  - [ ] Creating ERDs from Normalization Results
+  - [ ] Merging ERDs
 
 ----
 
