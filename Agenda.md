@@ -76,6 +76,23 @@
 
 - [ ] Practice/Demo Lab
   - [ ] Writing in Markdown (sample Normalization)
+
+    ```md
+    ## Normalization of Student Registration
+
+    ### 0N - 3NF
+
+    > Pretend for a moment that I've analyzed a form all the way through 3NF
+
+    ### Final Set of Entities
+
+    **Student**: StudentID(PK), FirstName, LastName
+
+    **CourseRegistration**: StudentID(PK|FK1), CourseID(PK|FK2), EnrolmentStatus, CurrentTerm
+
+    **Course**: CourseID(PK), Name, Credits, TotalHours
+    ```
+
   - [ ] ERDs using [Mermaid syntax](https://mermaid.js.org/syntax/entityRelationshipDiagram.html)
   - [ ] Committing Your Changes
   - [ ] Submitting the demo lab - `git push`
