@@ -94,6 +94,33 @@
     ```
 
   - [ ] ERDs using [Mermaid syntax](https://mermaid.js.org/syntax/entityRelationshipDiagram.html)
+
+    ```mermaid
+    erDiagram
+        Student {
+            text StudentID "PK"
+            text FirstName
+            text LastName
+        }
+
+        CourseRegistration {
+            text StudentID "PK|FK1"
+            text CourseID "PK|FK2"
+            text EnrolmentStatus
+            text CurrentTerm
+        }
+
+        Course {
+            text CourseID "PK"
+            text Name
+            text Credits
+            text TotalHours
+        }
+
+        Student ||--|{ CourseRegistration : "signs up"
+        Course ||--|{ CourseRegistration: ""
+    ```
+
   - [ ] Committing Your Changes
   - [ ] Submitting the demo lab - `git push`
 - [ ] [Merging ERDs](./Design/ESP-Merge.md)
