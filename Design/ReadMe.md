@@ -2,11 +2,23 @@
 
 ## Reading ERDs
 
-> Learn how you create your own ERDs with LucidChart in [this tutorial](https://training.lucid.co/entity-relationship-diagrams-in-lucidchart-1).
-
 | Comments | Diagram |
 | :--- | :--- |
 | Items to identify in this ERD are the **entities**, **attributes**, **relationships**, **cardinality** and **primary/foreign key** indicators. Not represented in this diagram is the **optionality** (`O`) indicator for attributes. | ![Logical ERD](./Logical-ERD.png) |
+
+## Drawing ERDs
+
+An ERD should be a *direct representation* of the result of normalizing a form/document. Key to creating an ERD is that you
+
+- ensure you have correctly identified all the entities with all their attributes and
+- faithfully represent the cardinality of the relationships between the entities. 
+
+There are a number of various tools you can use to create ERDs. For professional looking ERDs, I prefer [**LucidChart**](https://www.lucidchart.com/pages/). For "low-fidelity" diagrams, I will simply create it as a [Mermaid ERD](https://mermaid.js.org/syntax/entityRelationshipDiagram.html). The advantage to LucidChart is that I have control over the placement/arrangement of the entities. The advantage to Mermaid ERDs is that it is simply text-based and it fits in nicely in markdown documents.
+
+> Learn how you create your own ERDs with LucidChart in [this tutorial](https://training.lucid.co/entity-relationship-diagrams-in-lucidchart-1).
+
+
+----
 
 ## Normalization
 
