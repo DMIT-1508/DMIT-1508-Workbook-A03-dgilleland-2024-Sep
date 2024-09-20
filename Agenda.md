@@ -123,7 +123,16 @@
 
   - [ ] Committing Your Changes
   - [ ] Submitting the demo lab - `git push`
+
+----
+
+### Sep 23
+
 - [ ] [Merging ERDs](./Design/ESP-Merge.md)
+
+### Sep 25
+
+- [ ] Intro to SQL
 
 ----
 
