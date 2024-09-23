@@ -129,6 +129,7 @@
 ### Sep 23
 
 - [ ] [Merging ERDs](./Design/ESP-Merge.md)
+- [ ] *Lab Time Today*
 
 ### Sep 25
 
