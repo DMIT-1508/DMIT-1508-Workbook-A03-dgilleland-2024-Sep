@@ -133,7 +133,19 @@
 
 ### Sep 25
 
-- [ ] Intro to SQL
+- [ ] [Intro to SQL](./Docs/logs/ReadMe.md#introduction-to-sql)
+  - [ ] Reading Physical ERDs
+  - [ ] Intro to DDL
+
+### Sep 26 *(Online)*
+
+- [ ] More DDL
+
+----
+
+### Sep 30
+
+- ***No Classes***
 
 ----
 
