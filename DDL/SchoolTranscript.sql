@@ -62,8 +62,14 @@ CREATE TABLE Courses
 
 CREATE TABLE StudentCourses
 (
-    StudentID       int         NOT NULL,
-    CourseNumber    varchar(10) NOT NULL,
+    StudentID       int
+        CONSTRAINT FK_StudentCourses_StudentID
+            FOREIGN KEY REFERENCES Students(StudentID)
+                                NOT NULL,
+    CourseNumber    varchar(10)
+        CONSTRAINT FK_StudentCourses_CourseNumber
+            FOREIGN KEY REFERENCES Courses([Number])
+                                NOT NULL,
     [Year]          smallint    NOT NULL,
     Term            char(3)     NOT NULL,
     FinalMark       tinyint         NULL,
