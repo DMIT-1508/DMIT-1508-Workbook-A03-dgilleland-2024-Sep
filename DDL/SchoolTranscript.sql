@@ -49,7 +49,10 @@ CREATE TABLE Students
 
 CREATE TABLE Courses
 (
-    [Number]    varchar(10)     NOT NULL,
+    [Number]    varchar(10)
+        CONSTRAINT PK_Courses_Number
+            PRIMARY KEY
+                                NOT NULL,
     [Name]      varchar(50)     NOT NULL,
     Credits     decimal(3, 1)   NOT NULL,
     [Hours]     tinyint         NOT NULL,
@@ -64,6 +67,13 @@ CREATE TABLE StudentCourses
     [Year]          smallint    NOT NULL,
     Term            char(3)     NOT NULL,
     FinalMark       tinyint         NULL,
-    [Status]        char(1)     NOT NULL
+    [Status]        char(1)     NOT NULL,
+    -- In order to create a constraint
+    -- that involves two or more columns,
+    -- you have to put those "separate"
+    -- in your CREATE TABLE as a
+    -- table-level constraint
+    CONSTRAINT PK_StudentCourses_StudentID_CourseNumber
+        PRIMARY KEY (StudentID, CourseNumber)
 )
 
