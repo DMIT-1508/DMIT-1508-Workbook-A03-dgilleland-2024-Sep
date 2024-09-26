@@ -76,4 +76,3 @@ CREATE TABLE StudentCourses
     CONSTRAINT PK_StudentCourses_StudentID_CourseNumber
         PRIMARY KEY (StudentID, CourseNumber)
 )
-
