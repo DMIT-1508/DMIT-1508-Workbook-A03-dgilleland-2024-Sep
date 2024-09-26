@@ -21,25 +21,49 @@ GO
 -- 1) Drop any tables that already exist
 --    Always drop them in the reverse order
 --    that you create them
+DROP TABLE IF EXISTS StudentCourses
 DROP TABLE IF EXISTS Courses
 DROP TABLE IF EXISTS Students
 
 -- 2) Setup/Create my tables
+-- A CREATE TABLE statement contains a
+-- comma-separated list of column definitions.
 CREATE TABLE Students
 (
-    StudentID       int,
-    GivenName       varchar(50),
-    Surname         varchar(50),
-    DateOfBirth     datetime,
-    Enrolled        bit
+    StudentID       int
+        -- The CONSTRAINT keyword introduces some restrictions on the data that can be entered into this column.         
+        CONSTRAINT PK_Students_StudentID
+            PRIMARY KEY
+            -- Primary Key constraints
+            -- mean that a) you cannot
+            -- have duplicate values and
+            -- b) the value will be
+            -- "indexed" to make it faster
+            -- to find information
+                                NOT NULL,
+    GivenName       varchar(50) NOT NULL,
+    Surname         varchar(50) NOT NULL,
+    DateOfBirth     datetime    NOT NULL,
+    Enrolled        bit         NOT NULL
 )
 
 CREATE TABLE Courses
 (
-    Number          varchar(10),
-    Name            varchar(50),
-    Credits         decimal(3, 1),
-    Hours           tinyint,
-    Active          bit,
-    Cost            money
+    [Number]    varchar(10)     NOT NULL,
+    [Name]      varchar(50)     NOT NULL,
+    Credits     decimal(3, 1)   NOT NULL,
+    [Hours]     tinyint         NOT NULL,
+    Active      bit             NOT NULL,
+    [Cost]      money           NOT NULL
 )
+
+CREATE TABLE StudentCourses
+(
+    StudentID       int         NOT NULL,
+    CourseNumber    varchar(10) NOT NULL,
+    [Year]          smallint    NOT NULL,
+    Term            char(3)     NOT NULL,
+    FinalMark       tinyint         NULL,
+    [Status]        char(1)     NOT NULL
+)
+
