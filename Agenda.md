@@ -150,6 +150,7 @@
 ### Oct 2
 
 - [ ] Solution to Lab 1
+- [ ] External Resource: [SQL Glossary of Terms](https://www.databasestar.com/sql-glossary/)
 
 ### Oct 5 *(Online)*
 
