@@ -151,6 +151,7 @@
 
 - [ ] Solution to Lab 1
 - [ ] Lab 2a - Startup
+- [ ] Comments on **Quiz 1** *(upcoming)*
 - [ ] External Resource: [SQL Glossary of Terms](https://www.databasestar.com/sql-glossary/)
 
 ### Oct 5 *(Online)*
