@@ -147,6 +147,21 @@
 
 - ***No Classes***
 
+### Oct 2
+
+- [ ] Solution to Lab 1
+
+### Oct 5 *(Online)*
+
+- [ ] More DDL
+  - [ ] `IDENTITY(seed,increment)`
+  - [ ] Check and Default Constraints
+  - [ ] Indexes
+- [ ] DML Intro
+
+
+----
+
 ----
 
 ## TENTATIVE SCHEDULE
