@@ -34,17 +34,43 @@ CREATE TABLE Students
         -- The CONSTRAINT keyword introduces some restrictions on the data that can be entered into this column.         
         CONSTRAINT PK_Students_StudentID
             PRIMARY KEY
-            -- Primary Key constraints
-            -- mean that a) you cannot
-            -- have duplicate values and
-            -- b) the value will be
-            -- "indexed" to make it faster
-            -- to find information
+            -- Primary Key constraints mean that a) you cannot
+            -- have duplicate values and b) the value will be
+            -- "indexed" to make it faster to find information
+        IDENTITY(20250001, 3)    -- The first student will have the value 2025001
+        -- Assign the database the responsibility to generate
+        -- a value for this column (using the IDENTITY)
                                 NOT NULL,
-    GivenName       varchar(50) NOT NULL,
-    Surname         varchar(50) NOT NULL,
-    DateOfBirth     datetime    NOT NULL,
-    Enrolled        bit         NOT NULL
+    GivenName       varchar(50)
+        CONSTRAINT CK_Students_GivenName
+            CHECK (GivenName LIKE '[A-Z][A-Z]%')
+            -- Pattern Matching    \___/\___/\- % means zero or more characters
+            --                       |- A single character ranging from A to Z
+            -- Here are samples of values that would "pass" the check constraint
+            --      'Bellum'
+            --      'Yu'
+            --      'Je55'
+            -- The following would "fail" and prevent a row of data being entered
+            --      'J'
+            --      '5ally'
+                                NOT NULL,
+    Surname         varchar(50)
+        CONSTRAINT CK_Student_Surname
+            CHECK (Surname LIKE '__%')  -- Note the two underscores
+            -- Pattern Matching: a single underscore _ means a single character
+                                NOT NULL,
+    DateOfBirth     datetime
+        CONSTRAINT CK_Students_DateOfBirth
+            CHECK (DateOfBirth < GETDATE())
+            -- Relational Comparison to the results of the GETDATE() function
+            -- The GETDATE() will return the current date/time
+                                NOT NULL,
+    Enrolled        bit
+        CONSTRAINT DF_Students_Enrolled
+            DEFAULT (1) -- If a value is not supplied for this column
+                        -- during an INSERT, then the database server
+                        -- will use this value as the default
+                                NOT NULL
 )
 
 CREATE TABLE Courses
