@@ -78,14 +78,41 @@ CREATE TABLE Courses
     [Number]    varchar(10)
         CONSTRAINT PK_Courses_Number
             PRIMARY KEY
+        CONSTRAINT CK_Courses_Number
+            CHECK ([Number] LIKE '[a-z][a-z][a-z][a-z][- ][1-9][0-9][0-9][0-9]%')
+            --                    \ four letter      /\  /\ four digits      /
                                 NOT NULL,
-    [Name]      varchar(50)     NOT NULL,
-    Credits     decimal(3, 1)   NOT NULL,
-    [Hours]     tinyint         NOT NULL,
-    Active      bit             NOT NULL,
-    [Cost]      money           NOT NULL
+    [Name]      varchar(50)
+        CONSTRAINT CK_Courses_Name
+            CHECK (LEN([Name]) >= 5)
+            -- The LEN() function will return the number of characters
+                                NOT NULL,
+    Credits     decimal(3, 1)
+        CONSTRAINT CK_Courses_Credits
+            CHECK (Credits = 3.0 OR Credits = 4.5 OR Credits = 6.0)
+                                NOT NULL,
+    [Hours]     tinyint
+        CONSTRAINT CK_Courses_Hours
+            CHECK ([Hours] IN (60, 75, 90, 120))
+            -- As long as [Hours] matches one of these, it's acceptable
+                                NOT NULL,
+    Active      bit
+        CONSTRAINT DF_Courses_Active
+            DEFAULT (1)
+                                NOT NULL,
+    [Cost]      money
+        CONSTRAINT CK_Courses_Cost
+            CHECK (Cost >= 0)   -- Always indicating the acceptable value
+                                NOT NULL
 )
 
+/*
+StudentCourses table
+ Year must be between 2000 and 2299
+ Term must be either "SEP", "JAN" or "MAY"
+ FinalMark must be between 0 and 100
+ Status must be either 'W', 'E', or 'A' (Withdrawal, Enrolled, or Audit) and must default to 'E'
+*/
 CREATE TABLE StudentCourses
 (
     StudentID       int
@@ -96,14 +123,26 @@ CREATE TABLE StudentCourses
         CONSTRAINT FK_StudentCourses_CourseNumber
             FOREIGN KEY REFERENCES Courses([Number])
                                 NOT NULL,
-    [Year]          smallint    NOT NULL,
-    Term            char(3)     NOT NULL,
-    FinalMark       tinyint         NULL,
-    [Status]        char(1)     NOT NULL,
-    -- In order to create a constraint
-    -- that involves two or more columns,
-    -- you have to put those "separate"
-    -- in your CREATE TABLE as a
+    [Year]          smallint
+        CONSTRAINT CK_StudentCourses_Year
+            CHECK ([Year] BETWEEN 2000 AND 2299)
+                                NOT NULL,
+    Term            char(3)
+        CONSTRAINT CK_StudentCourses_Term
+            CHECK (Term IN ('SEP', 'JAN', 'MAY'))
+                                NOT NULL,
+    FinalMark       tinyint
+        CONSTRAINT CK_StudentCourses_FinalMark
+            CHECK (FinalMark BETWEEN 0 AND 100)
+                                    NULL,
+    [Status]        char(1)
+        CONSTRAINT CK_StudentCourses_Status
+            CHECK ([Status] IN ('W', 'E', 'A'))
+        CONSTRAINT DF_StudentCourses_Status
+            DEFAULT ('E')
+                                NOT NULL,
+    -- In order to create a constraint that involves two or more columns,
+    -- you have to put those "separate" in your CREATE TABLE as a
     -- table-level constraint
     CONSTRAINT PK_StudentCourses_StudentID_CourseNumber
         PRIMARY KEY (StudentID, CourseNumber)
