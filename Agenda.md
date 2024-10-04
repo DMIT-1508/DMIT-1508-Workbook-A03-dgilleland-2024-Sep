@@ -165,6 +165,26 @@
   - [ ] Indexes
 - [ ] DML Intro
 
+----
+
+### Oct 7
+
+- [ ] Complete DDL
+  - [ ] Updates to [`SchoolTranscriptTestData.sql`](./DDL/SchoolTranscriptTestData.sql)
+  - [ ] Indexes
+  - [ ] Alter Table statements
+    - [ ] `Students.MiddleName`
+    - [ ] others
+  - [ ] Refer to ESP Demo code
+  - [ ] Lab Time
+
+### Oct 9
+
+- [ ] **Quiz 1**
+
+### Oct 10
+
+- [ ] DML Statements
 
 ----
 
