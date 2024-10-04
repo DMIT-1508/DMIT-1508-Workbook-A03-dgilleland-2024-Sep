@@ -173,7 +173,7 @@
   - [ ] Updates to [`SchoolTranscriptTestData.sql`](./DDL/SchoolTranscriptTestData.sql)
   - [ ] Indexes
   - [ ] Alter Table statements
-    - [ ] `Students.MiddleName`
+    - [ ] `Students.MiddleNames`
     - [ ] others
   - [ ] Refer to ESP Demo code
   - [ ] Lab Time
