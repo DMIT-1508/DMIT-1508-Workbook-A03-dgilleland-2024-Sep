@@ -147,3 +147,65 @@ CREATE TABLE StudentCourses
     CONSTRAINT PK_StudentCourses_StudentID_CourseNumber
         PRIMARY KEY (StudentID, CourseNumber)
 )
+
+/*
+    Once our database is deployed into production, we can
+    expect data to be entered into our tables. But what if
+    we need to make changes to the schema/structure of our
+    tables? We can't (shouldn't) DROP TABLE, because we will
+    lose all of the data.
+
+    SELECT * FROM Students
+
+    To solve this, we use the ALTER TABLE statement.
+*/
+
+-- A) Modify the Students table to include an optional
+--    column for the MiddleNames (max of 75 characters)
+ALTER TABLE Students
+    ADD MiddleNames  varchar(75)     NULL
+--  By having this as NULL, it will not cause a conflict
+--  with existing data in the database
+
+-- B) Also create a column named GPA that is a decimal(3,1).
+ALTER TABLE Students
+    ADD GPA         decimal(3, 1)   NULL
+
+-- C) Double the size of the Surname column. This is to
+--    better accommodate students with hypenated surnames.
+ALTER TABLE Students
+    ALTER COLUMN Surname    varchar(100)    NOT NULL
+
+-- D) Add a column to the Courses table for the Semester.
+--    Store the Semester number as a tinyint. Allow it to
+--    be NULL. Also ensure that the values have to be
+--    between 1 and 4.
+ALTER TABLE Courses
+    ADD Semester    tinyint         NULL
+        CONSTRAINT CK_Courses_Semester
+            CHECK (Semester BETWEEN 1 and 4)
+
+-- E) We want to indicate if a course is available for
+--    "Open Studies". Open Studies courses are ones that
+--    Students can take without having to be enrolled in
+--    the entire Program of Studies.
+ALTER TABLE Courses
+    ADD [OpenStudies]   bit     NOT NULL
+        CONSTRAINT DF_Courses_OpenStudies
+            DEFAULT (0)
+-- Because we have a default value that the database
+-- can use, we can make this column required (NOT NULL)
+-- and the database will simply put the default value
+-- into that column for all the pre-existing rows of data.
+
+/*
+    In our database, we are able to create INDEXes that
+    make our searching/modifying faster.
+*/
+
+CREATE NONCLUSTERED INDEX IX_StudentCourses_StudentID
+    ON StudentCourses(StudentID)
+
+CREATE NONCLUSTERED INDEX IX_StudentCourses_CourseNumber
+    ON StudentCourses(CourseNumber)
+    

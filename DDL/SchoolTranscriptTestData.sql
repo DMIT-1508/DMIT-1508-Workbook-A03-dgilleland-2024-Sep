@@ -107,7 +107,7 @@ VALUES  ('Alice', 'Smith', '2001-01-15'),
         ('Chris', 'Turner', '2006-07-25'),
         ('Daniel', 'Phillips', '2007-11-14')
 
-
+GO
 /* Modifying the Courses data to fit a pattern for the semester*/
 UPDATE  Courses
 SET     Semester = 1
