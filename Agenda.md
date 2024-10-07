@@ -2,7 +2,7 @@
 
 > ***NOTE:** This agenda is copied from the previous term and needs to be adjusted to this semester. Otherwise, the topics are generally in the correct order.*
 
-> These are my notes on what I plan to teach in each [upcoming class](#oct-2). For the timeline of where we are today, see [the current schedule](./README.md#schedule).
+> These are my notes on what I plan to teach in each [upcoming class](#oct-7). For the timeline of where we are today, see [the current schedule](./README.md#schedule).
 >
 > ### *... Warn those who are idle ..., encourage the disheartened, help the weak, be patient with everyone.*
 >
@@ -168,6 +168,8 @@
 ----
 
 ### Oct 7
+
+![](./Docs/Images/bth-64.png)
 
 - [ ] Complete DDL
   - [ ] Updates to [`SchoolTranscriptTestData.sql`](./DDL/SchoolTranscriptTestData.sql)
