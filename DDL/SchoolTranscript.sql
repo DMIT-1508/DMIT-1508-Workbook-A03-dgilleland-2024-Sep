@@ -175,6 +175,9 @@ ALTER TABLE Students
 --    better accommodate students with hypenated surnames.
 ALTER TABLE Students
     ALTER COLUMN Surname    varchar(100)    NOT NULL
+-- Notice that we are modifying an existing column in the
+-- table, and that it was already `NOT NULL`. We can keep
+-- this aspect of the column being required (NOT NULL)
 
 -- D) Add a column to the Courses table for the Semester.
 --    Store the Semester number as a tinyint. Allow it to
