@@ -26,6 +26,10 @@ DROP TABLE IF EXISTS Courses
 DROP TABLE IF EXISTS Students
 
 -- 2) Setup/Create my tables
+--    Parent tables before child tables
+-- The CREATE TABLE statement in SQL is used to
+-- define the schema of a table. This is also
+-- referred to as a table definition.
 -- A CREATE TABLE statement contains a
 -- comma-separated list of column definitions.
 CREATE TABLE Students
@@ -55,7 +59,7 @@ CREATE TABLE Students
             --      '5ally'
                                 NOT NULL,
     Surname         varchar(50)
-        CONSTRAINT CK_Student_Surname
+        CONSTRAINT CK_Students_Surname
             CHECK (Surname LIKE '__%')  -- Note the two underscores
             -- Pattern Matching: a single underscore _ means a single character
                                 NOT NULL,
@@ -75,12 +79,12 @@ CREATE TABLE Students
 
 CREATE TABLE Courses
 (
-    [Number]    varchar(10)
+    [Number]        varchar(10) -- cannot be used with IDENTITY
         CONSTRAINT PK_Courses_Number
             PRIMARY KEY
         CONSTRAINT CK_Courses_Number
             CHECK ([Number] LIKE '[a-z][a-z][a-z][a-z][- ][1-9][0-9][0-9][0-9]%')
-            --                    \ four letter      /\  /\ four digits      /
+            --                    \ four letters     /\  /\ four digits      /
                                 NOT NULL,
     [Name]      varchar(50)
         CONSTRAINT CK_Courses_Name
@@ -145,9 +149,14 @@ CREATE TABLE StudentCourses
     -- you have to put those "separate" in your CREATE TABLE as a
     -- table-level constraint
     CONSTRAINT PK_StudentCourses_StudentID_CourseNumber
-        PRIMARY KEY (StudentID, CourseNumber)
+        PRIMARY KEY (StudentID, CourseNumber),
+    -- Here is a CHECK constraint that involves more
+    -- than one column:
+    CONSTRAINT CK_StudentCourses_FinalMark_Status
+        CHECK ([Status] <> 'A' OR ([Status] = 'A' AND FinalMark IS NULL))
 )
 
+GO
 /*
     Once our database is deployed into production, we can
     expect data to be entered into our tables. But what if
