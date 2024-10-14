@@ -190,6 +190,24 @@
 
 ----
 
+### Oct 14
+
+- ***No Classes***
+
+### Oct 16
+
+- [ ] DML Statements
+  - [ ] `UPDATE` and `DELETE`
+- [ ] Queries
+
+### Oct 17 *(Online)*
+
+- [ ] Queries
+
+
+
+----
+
 ----
 
 ## TENTATIVE SCHEDULE
