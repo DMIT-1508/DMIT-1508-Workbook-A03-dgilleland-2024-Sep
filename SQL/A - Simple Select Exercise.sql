@@ -1,6 +1,6 @@
 --SIMPLE SELECT EXERCISE 1
 
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -21,12 +21,12 @@ ORDER BY clause - Sort our final results
 SELECT  'Dan', 'Gilleland'
 
 -- Simple Select with expressions
-SELECT  'Dan' + ' ' + 'Gilleland', 18 * 52, '5' + '10'
+SELECT  'Dan' + ' ' + 'Gilleland', 25 * 52, '5' + '10'
 --        textual information      numbers    textual
 
 -- Specify a column name with some hard-code/calculated values
 SELECT  'Dan' + ' ' + 'Gilleland' AS 'Instructor',
-        22 * 52 AS 'Weeks at the job'
+        25 * 52 AS 'Weeks at the job'
 
 -- Let's use the SELECT statement with database tables
 
@@ -50,7 +50,7 @@ FROM    Club
   -- Pro-Tip: Press [ctrl] + r to toggle the results window
   -- Pro-Tip: If you write the FROM clause before specifying the columns,
   --            you will get Intellisense help on the column names
-  -- Pro-Tip: Press [ctrl] + [shift] + r to "refresh" intellisense
+  -- Pro-Tip: Press [ctrl] + [shift] + r to "refresh" intellisense - In VS Code, press [F1] and enter "refresh"
 
 -- 2.   Select the FirstNames and LastNames of all the students
 SELECT  FirstName, LastName
@@ -109,12 +109,12 @@ SELECT  PositionID, PositionDescription
 FROM    Position
 
 --6.    Select the Course Names whose course hours are less than 96
-SELECT  C.CourseName
+SELECT  C.CourseName --, C.CourseId
 FROM    Course AS C -- I can have an alias to the table name
 WHERE   C.CourseHours < 96
 
 -- Type with me the following...
-SELECT  ST.LastName, ST.DateHired, ST.DateReleased
+SELECT  ST.LastName, ST.DateHired, ST.DateReleased, ST.FirstName, ST.LoginID
 FROM    Staff AS ST -- The use of the AS keyword in producing table/column aliases is optional
                     -- but it can be a good idea for readability.
 -- You can use the full table name to fully-qualify your column names
