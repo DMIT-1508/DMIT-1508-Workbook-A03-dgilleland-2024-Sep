@@ -39,6 +39,66 @@ FROM    Payment
 WHERE   Amount < 500
    OR   PaymentTypeID = 5
 
+--15. Create separate SELECT statements for each table in the school database. Select all the rows from those tables.
+-- TODO: Student Answer Here
+SELECT  [PositionID],
+        [PositionDescription]
+FROM    [Position]
+
+SELECT  [StaffID],
+        [FirstName],
+        [LastName],
+        [DateHired],
+        [DateReleased],
+        [PositionID],
+        [LoginID]
+FROM    Staff
+
+SELECT  [CourseId],
+        [CourseName],
+        [CourseHours],
+        [MaxStudents],
+        [CourseCost]
+FROM    Course
+
+SELECT  [StudentID],
+        [FirstName],
+        [LastName],
+        [Gender],
+        [StreetAddress],
+        [City],
+        [Province],
+        [PostalCode],
+        [Birthdate],
+        [BalanceOwing]
+FROM    Student
+
+SELECT  [StudentID],
+        [CourseId],
+        [Semester],
+        [Mark],
+        [WithdrawYN],
+        [StaffID]
+FROM    Registration
+
+SELECT  [ClubId],
+        [ClubName]
+FROM    Club
+
+SELECT  [StudentID],
+        [ClubId]
+FROM    Activity
+
+SELECT  [PaymentTypeID],
+        [PaymentTypeDescription]
+FROM    PaymentType
+
+SELECT  [PaymentID],
+        [PaymentDate],
+        [Amount],
+        [PaymentTypeID],
+        [StudentID]
+FROM    Payment
 
 /* ===============================
    |  B - Simple Select          |

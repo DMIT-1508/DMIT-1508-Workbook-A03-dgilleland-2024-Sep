@@ -190,3 +190,6 @@ WHERE   CourseID LIKE '____1%' -- four underscores, 1, %
 -- TODO: Student Answer Here
 
 
+--15. Create separate SELECT statements for each table in the school database. Select all the rows from those tables.
+-- TODO: Student Answer Here
+
