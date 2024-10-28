@@ -573,6 +573,13 @@ AS
         LEFT OUTER JOIN Course AS C
             ON R.CourseId = C.CourseId
 GO
+-- A quick sample of using StudentGrades view
+SELECT  [StudentID],
+        [StudentFullName],
+        [CourseId],
+        [CourseName],
+        [Mark]
+FROM   StudentGrades
 
 /* *******************
  * Using the Views

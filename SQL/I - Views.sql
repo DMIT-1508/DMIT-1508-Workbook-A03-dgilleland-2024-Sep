@@ -1,5 +1,5 @@
 --View Exercise
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -22,7 +22,7 @@ AS
 GO
 -- Now we can use the StaffList view as if it were a table
 SELECT  StaffFullName
-FROM    StaffList
+FROM    StaffList -- StaffList is NOT a table, but it gives a tabular result
 -- SP_HELP Staff
 -- SP_HELPTEXT StaffList    -- Gets the text of the View
 -- SP_HELP StaffList        -- Gets schema info on the View
@@ -55,6 +55,7 @@ AS
 GO
 SELECT  FullName, PositionName, PositionID
 FROM    StaffConfidential
+WHERE   PositionName LIKE '%Chair%'
 GO
 
 --3.  Create a view called StaffExperience that returns the name of the staff members that have taught courses and the names of the courses they have taught. Sort the results by staff last name then first name, then course name.
@@ -74,6 +75,9 @@ AS
         -- "The OFFSET is the number of rows to skip before including them in the result."
         OFFSET 0 ROWS
 GO
+-- Test the results of the StaffExperienceRaw
+-- SELECT * FROM StaffExperienceRaw
+
 
 DROP VIEW IF EXISTS StaffExperience
 GO
