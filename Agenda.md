@@ -206,10 +206,131 @@
 
 
 
-----
+### Oct 21
+
+- [ ] **School Closed** - Thanksgiving
+
+### Oct 23
+
+- [ ] Queries
+
+### Oct 24
+
+- [ ] Queries
 
 ----
 
+### Oct 28
+
+- [ ] Queries
+
+### Oct 30
+
+- [ ] **Lab Time**
+
+### Oct 31
+
+- [ ] **Lab Time**
+
+----
+
+### Nov 4
+
+- [ ] Stored Procedures
+
+
+### Nov 6
+
+- [ ] Stored Procedures
+
+
+### Nov 7
+
+- [ ] Stored Procedures
+
+----
+
+### Nov 11
+
+- [ ] Stored Procedures
+
+
+### Nov 13
+
+- [ ] **Quiz 2** - DDL + DML + Queries
+
+
+### Nov 14
+
+- [ ] Stored Procedures
+
+----
+
+### Nov 18
+
+- [ ] Stored Procedures
+
+
+### Nov 20
+
+- [ ] *TBD*
+
+
+### Nov 21
+
+- [ ] *TBD*
+
+----
+
+### Nov 25
+
+- [ ] Triggers
+
+
+### Nov 27
+
+- [ ] Triggers
+
+
+### Nov 28
+
+- [ ] Triggers
+
+----
+
+### Dec 2
+
+- [ ] Triggers
+
+
+### Dec 4
+
+- [ ] **Quiz 3**
+
+
+### Dec 5
+
+- [ ] **Lab Time**
+
+----
+
+### Dec 9
+
+- [ ] *TBD*
+
+
+### Dec 11
+
+- [ ] **Quiz 3**
+
+
+### Dec 12
+
+- [ ] *TBD*
+
+----
+
+<!--
 ## TENTATIVE SCHEDULE
 
 ### Sep 6
@@ -280,3 +401,4 @@
 - [ ] Answer to *SchoolTranscript.sql* `ALTER TABLE` and `CREATE INDEX` problems
 - [ ] Intro to SQL Queries
 
+-->
