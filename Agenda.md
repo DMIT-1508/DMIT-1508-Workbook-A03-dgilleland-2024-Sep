@@ -252,7 +252,7 @@
 
 ### Nov 11
 
-- [ ] Stored Procedures
+- ***No Classes***
 
 
 ### Nov 13
