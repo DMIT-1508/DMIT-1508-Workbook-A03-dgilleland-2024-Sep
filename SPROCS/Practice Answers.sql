@@ -10,14 +10,51 @@ GO
    ------------------------------- */
 
 --6. Create a stored procedure called "Provinces" to list all the students provinces.
+-- TODO: Student Answer Here
+CREATE PROCEDURE Provinces
+AS
+    SELECT  DISTINCT Province
+    FROM    Student
+RETURN
+GO
+-- EXEC Provinces
 
 --7. OK, question 6 was ridiculously simple and serves no purpose. Lets remove that stored procedure from the database.
+-- TODO: Student Answer Here
+DROP PROCEDURE IF EXISTS Provinces
+GO
 
 --8. Create a stored procedure called StudentPaymentTypes that lists all the student names and their payment types. Ensure all the student names are listed, including those who have not yet made a payment.
+-- TODO: Student Answer Here
+DROP PROCEDURE IF EXISTS StudentPaymentTypes
+GO
+CREATE PROCEDURE StudentPaymentTypes
+AS
+    SELECT  FirstName + ' ' + LastName AS 'StudentName',
+            PaymentTypeDescription
+    FROM    Student AS S
+        LEFT OUTER JOIN Payment AS P
+            ON S.StudentID = P.StudentID
+        LEFT OUTER JOIN PaymentType AS PT
+            ON P.PaymentTypeID = PT.PaymentTypeID
+RETURN
+GO
+-- EXEC StudentPaymentTypes
 
 --9. Modify the procedure from question 8 to return only the student names that have made payments.
-
+-- TODO: Student Answer Here
+ALTER PROCEDURE StudentPaymentTypes
+AS
+    SELECT  FirstName + ' ' + LastName AS 'StudentName',
+            PaymentTypeDescription
+    FROM    Student AS S
+        INNER JOIN Payment AS P
+            ON S.StudentID = P.StudentID
+        INNER JOIN PaymentType AS PT
+            ON P.PaymentTypeID = PT.PaymentTypeID
+RETURN
 GO
+-- EXEC StudentPaymentTypes
 
 /* ===============================
    |  B - Stored Procedures.sql  |
