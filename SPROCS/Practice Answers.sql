@@ -1,6 +1,6 @@
 /* Answers to Practice Stored Procedures Questions
  *************************************************/
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -28,13 +28,15 @@ GO
 DROP PROCEDURE IF EXISTS RemoveFromClub
 GO
 CREATE PROCEDURE RemoveFromClub
-    @StudentId      int
+    @StudentId      int,
+    @ClubId         varchar(10)
 AS
-    IF @StudentId IS NULL
-        RAISERROR('StudentId is required', 16, 1)
+    IF @StudentId IS NULL OR @ClubId IS NULL
+        RAISERROR('StudentId and ClubId are required', 16, 1)
     ELSE
-        DELETE FROM Student
+        DELETE FROM Activity
         WHERE  StudentID = @StudentId
+          AND  ClubId = @ClubId
 RETURN
 GO
 
