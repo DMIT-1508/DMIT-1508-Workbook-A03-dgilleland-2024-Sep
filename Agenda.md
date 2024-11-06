@@ -258,6 +258,12 @@
 ### Nov 13
 
 - [ ] **Quiz 2** - DDL + DML + Queries
+  - *This quiz will cover:*
+    - Modifying `CREATE TABLE` statements to include constraints
+    - `ALTER TABLE`
+    - `SELECT` statements/queries *(~50% of the weight)*
+    - DML Statements
+    - Views
 
 
 ### Nov 14
