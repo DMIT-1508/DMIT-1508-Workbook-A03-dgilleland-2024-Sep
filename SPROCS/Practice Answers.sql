@@ -106,6 +106,7 @@ AS
         FROM    Registration AS R
             INNER JOIN Course AS C ON R.CourseId = C.CourseId
         WHERE   Mark IS NOT NULL
+          AND   StudentId = @StudentId
 RETURN
 GO
 
