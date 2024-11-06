@@ -253,7 +253,7 @@ CREATE PROCEDURE FindCourse
 AS
     SELECT  CourseId, CourseName
     FROM    Course
-    WHERE   CourseName LIKE '%programming%'
+    WHERE   CourseName LIKE '%' + @PartialName + '%'
 RETURN
 GO
 
