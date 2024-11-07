@@ -83,7 +83,7 @@ GO
 -- direct INSERTs to the database table
 INSERT INTO Position(PositionDescription)  VALUES (NULL)
 SELECT @@IDENTITY
-INSERT INTO Position(PositionDescription)  VALUES ('Substitute')
+INSERT INTO Position(PositionDescription)  VALUES ('Substitute Instructor')
 -- @@IDENTITY is the last-generated/used IDENTITY value regardless of what
 -- database table it was generated in. This is GLOBAL variable.
 SELECT @@IDENTITY -- The PositionID that was actually used/stored
@@ -98,7 +98,8 @@ EXEC AddPosition 'The Boss' -- This should result in an error as well (a duplica
 EXEC AddPosition 'The Boss of everything and everyone, everywhere and all the time, both past present and future, without any possible exception. Unless, of course, I''m not...'
 EXEC AddPosition 'The Janitor'
 SELECT * FROM Position
--- DELETE FROM Position WHERE PositionID = 12
+-- DELETE FROM Position WHERE PositionID = 15 -- or whatever you have in your database
+EXEC AddPosition 'Auditor'
 GO
 
 ALTER PROCEDURE AddPosition
@@ -148,6 +149,8 @@ CREATE PROCEDURE LookupClubMembers
 AS
     -- Body of procedure here
     IF @ClubId IS NULL OR NOT EXISTS(SELECT * FROM Club WHERE ClubId = @ClubId)
+    --                   \___ Exists will return a true or a false         ___/
+    --                    \ ! (true) => false  and ! (false) => true
     BEGIN
         RAISERROR('ClubID is invalid/does not exist', 16, 1)
     END
@@ -178,6 +181,7 @@ CREATE PROCEDURE RemoveClubMembership
 AS
     -- Body of procedure here
     IF @ClubId IS NULL OR NOT EXISTS(SELECT * FROM Club WHERE ClubId = @ClubId)
+    --                               \_ Look for certain data in the table __/
     BEGIN
         RAISERROR('ClubID is invalid/does not exist', 16, 1)
     END
