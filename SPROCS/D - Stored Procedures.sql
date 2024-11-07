@@ -1,8 +1,21 @@
 --Stored Procedures (Sprocs)
 -- Global Variables - @@IDENTITY, @@ROWCOUNT, @@ERROR
+--      @@IDENTITY - Hold the Database-Generated value for a PK that is an
+--                   IDENTITY column whenever an INSERT is attempted.
+--                   This is useful immediatly after the INSERT to get the
+--                   ID value:    SELECT @@IDENTITY
+--      @@ROWCOUNT - Holds the number of rows affected by the most recent
+--                   DML (INSERT/UPDATE/DELETE) statement
+--                   Useful in an IF statement to see if any rows were affected:
+--                   IF @@ROWCOUNT > 0
+--      @@ERROR    - Used to hold the error number when some DML statement fails.
+--                   A value of zero (0) means that there was no error.
+--                   Useful in an IF statement to see if any errors were generated:
+--                   IF @@ERROR <> 0
+--                       -- then there's a problem
 -- Other global variables can be found here:
 --  https://code.msdn.microsoft.com/Global-Variables-in-SQL-749688ef
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -40,7 +53,9 @@ AS
         END   -- }
         ELSE
         BEGIN -- {
+            -- Does the description already exist
             IF EXISTS(SELECT * FROM Position WHERE PositionDescription = @Description)
+            -- \____ Returns true if any rows are returned, false otherwise ________/
             BEGIN -- {
                 RAISERROR('Duplicate positions are not allowed', 16, 1)
             END   -- }
@@ -48,6 +63,7 @@ AS
             BEGIN -- { -- This BEGIN/END is needed, because of two SQL statements
                 INSERT INTO Position(PositionDescription)
                 VALUES (@Description)
+
                 -- Send back the database-generated primary key
                 SELECT @@IDENTITY AS 'NewPositionID' -- This is a global variable
             END   -- }
@@ -56,7 +72,8 @@ AS
 RETURN
 GO
 
--- Let's test our AddPosition stored procedure
+-- Let's review what would happen with @@IDENTITY from
+-- direct INSERTs to the database table
 INSERT INTO Position(PositionDescription)  VALUES (NULL)
 SELECT @@IDENTITY
 INSERT INTO Position(PositionDescription)  VALUES ('Substitute')
@@ -64,6 +81,7 @@ INSERT INTO Position(PositionDescription)  VALUES ('Substitute')
 -- database table it was generated in. This is GLOBAL variable.
 SELECT @@IDENTITY -- The PositionID that was actually used/stored
 
+-- Let's test our AddPosition stored procedure
 SELECT * FROM Position
 EXEC AddPosition 'The Boss'
 EXEC AddPosition NULL -- This should result in an error being raised
@@ -160,6 +178,7 @@ AS
     BEGIN
         DELETE FROM Activity
         WHERE       ClubId = @ClubId
+        
         -- Any Insert/Update/Delete will affect the global @@ROWCOUNT value
         IF @@ROWCOUNT = 0
         BEGIN

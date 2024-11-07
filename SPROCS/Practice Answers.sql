@@ -472,7 +472,7 @@ AS
     SELECT S.StudentID, FirstName, LastName, PaymentTypeDescription, Amount, PaymentDate
     FROM   Student AS S
         INNER JOIN Payment AS P ON S.StudentID = P.StudentID
-        INNER JOIN PayemtnType AS PT ON P.PaymentTypeID = PT.PaymentTypeID
+        INNER JOIN PaymentType AS PT ON P.PaymentTypeID = PT.PaymentTypeID
     IF @@ERROR <> 0 OR @@ROWCOUNT = 0
     BEGIN
         RAISERROR('Unable to create archive records', 16, 1)
