@@ -15,6 +15,13 @@
 --                       -- then there's a problem
 -- Other global variables can be found here:
 --  https://code.msdn.microsoft.com/Global-Variables-in-SQL-749688ef
+--
+-- EXISTS() function
+--   - Used to determine if any rows are returned from a query.
+--     Returns true if there are 1 or more rows, otherwise it returns false.
+--     Helpful for determining if certain data exists in the database,
+--     such as determining if a certain course exists.
+
 USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
