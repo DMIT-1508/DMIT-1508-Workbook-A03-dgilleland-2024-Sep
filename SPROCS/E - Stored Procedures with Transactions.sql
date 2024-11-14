@@ -1,7 +1,11 @@
 --  Stored Procedures (Sprocs)
 -- Demonstrate using Transactions in a Stored Procedure
+-- Transactions are used when we have two or more INSERT/UPDATE/DELETE
+-- statements that we want to accomplish. The idea is that all of
+-- the INSERT/UPDATE/DELETE statements must either fail or succeed
+-- as a group/set.
 
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -20,15 +24,19 @@ GO
 
 
 -- 1. Add a stored procedure called TransferCourse that accepts a student ID, semester, and two course IDs: the one to move the student out of and the one to move the student in to.
+-- The three parts to transactions are a) BEGIN TRANSACTION, b) ROLLBACK TRANSACTION, and
+-- c) COMMIT TRANSACTION
+        -- Step 1) Withdraw the student from the first course
+            -- Step 2) Enroll the student in the second course
 GO
 DROP PROCEDURE IF EXISTS TransferCourse
 GO
 CREATE PROCEDURE TransferCourse
     -- Parameters here
-    @StudentID      int,
-    @Semester       char(5),
-    @LeaveCourseID  char(7),
-    @EnterCourseID  char(7)
+    @StudentID      int,        -- Who we are transferring
+    @Semester       char(5),    -- in Which semester
+    @LeaveCourseID  char(7),    -- Course to remove from
+    @EnterCourseID  char(7)     -- Course to add the student to
 AS
     -- Body of procedure here
     -- Basic Validation - Parameter values are required
@@ -38,10 +46,9 @@ AS
     END
     ELSE
     BEGIN
-        -- Begin Transaction
+        -- A) Begin Transaction
         BEGIN TRANSACTION   -- Means that any insert/update/delete is "temporary" until committed
         -- Step 1) Withdraw the student from the first course
-        --PRINT('Update Registration to set WithdrawYN to Y')
         UPDATE Registration
            SET WithdrawYN = 'Y'
         WHERE  StudentID = @StudentID     -- for the correct student
@@ -49,16 +56,14 @@ AS
           AND  Semester = @Semester       -- and the correct semester
           AND  (WithdrawYN = 'N' OR WithdrawYN IS NULL) -- and they are not already withdrawn
         --         Check for error/rowcount
-        IF @@ERROR <> 0 OR @@ROWCOUNT = 0
+        IF @@ERROR <> 0 OR @@ROWCOUNT = 0 -- If we were unable to remove the student...
         BEGIN
-            --PRINT('RAISERROR + ROLLBACK')
             RAISERROR('Unable to withdraw student', 16, 1)
-            ROLLBACK TRANSACTION -- reverses the "temporary" changes to the database and closes the transaction
+            ROLLBACK TRANSACTION -- B) reverses the "temporary" changes to the database and closes the transaction
         END
         ELSE
         BEGIN
             -- Step 2) Enroll the student in the second course
-            --PRINT('Insert Registration to add student')
             INSERT INTO Registration(StudentID, CourseId, Semester)
             VALUES (@StudentID, @EnterCourseID, @Semester)
             --         Check for error/rowcount
@@ -66,26 +71,84 @@ AS
             -- we have to check them immediately after our insert/update/delete
             IF @@ERROR <> 0 OR @@ROWCOUNT = 0 -- Do our check for errors after each I/U/D
             BEGIN
-                --PRINT('RAISERROR + ROLLBACK')
                 RAISERROR('Unable to transfer student to new course', 16, 1)
-                ROLLBACK TRANSACTION
+                ROLLBACK TRANSACTION -- B) reverse the "temporary" changes
             END
             ELSE
             BEGIN
-                --PRINT('COMMIT TRANSACTION')
-                COMMIT TRANSACTION -- Make the changes permanent on the database
+                COMMIT TRANSACTION -- C) Make the changes permanent on the database
             END
         END
     END
 RETURN
 GO
+-- Let's test the stored procedure
+-- Start with using "good" data
+SELECT * FROM REGISTRATION -- just to see what's in our database
+-- I choose the student 200688700  -- SELECT * FROM Student WHERE StudentID = 200688700
+-- They are currently in DMIT152 in semester 2005S
+-- SELECT * FROM Course WHERE CourseId = 'DMIT152'  -- Advanced Programming (.net 1)
+-- I want to move that student to the DMIT163 course
+-- SELECT * FROM Course WHERE CourseId = 'DMIT163'  -- Game Programming 1
+-- To accomplish this transfer, I will call my stored procedure
+EXEC TransferCourse 200688700, '2005S', 'DMIT152', 'DMIT163'
+-- Check my database for the changes
+SELECT * FROM Registration WHERE Semester = '2005S' AND StudentID = 200688700
+-- Next, let's see what happens if there is any "problem" data for our transfer
+-- The first example would be attempting to remove a student from a course they
+-- were not part of (e.g.: 'DMIT172')
+EXEC TransferCourse 200688700, '2005S', 'DMIT172', 'DMIT221'
+-- Here's another example of attempting to transfer to another course
+EXEC TransferCourse 200688700, '2005S', 'DMIT163', 'SBCC777'
+SELECT * FROM Registration WHERE Semester = '2005S' AND StudentID = 200688700
 
 
 -- 2. Create a stored procedure called DissolveClub that will accept a club id as its parameter. Ensure that the club exists before attempting to dissolve the club. You are to dissolve the club by first removing all the members of the club and then removing the club itself.
 --    - Delete of rows in the Activity table
 --    - Delete of rows in the Club table
 -- TODO: Student Answer Here
-
+-- sp_help Club
+GO -- to make sure this CREATE PROCEDURE is in it's own "batch"
+CREATE OR ALTER PROCEDURE DissolveClub
+    @ClubId     varchar(10)     -- My parameter matches the PK in the Club table
+AS
+    -- 0) Validate the parameter values (NULL check)
+    IF @ClubId IS NULL
+    BEGIN
+        RAISERROR('ClubID is required', 16, 1)
+    END
+    ELSE
+    BEGIN
+        BEGIN TRANSACTION   -- Allow the database to track the changes
+        -- 1) Attempted removal of club members (DELETE FROM Activity)
+        DELETE FROM Activity
+        WHERE ClubId = @ClubId
+        -- !! Check if the DML statement has problem
+        IF @@ERROR <> 0     -- For some reason, the DELETE failed with an error
+        BEGIN
+            RAISERROR('Unable to remove members from the club', 16, 1)
+            ROLLBACK TRANSACTION
+        END
+        ELSE
+        BEGIN
+            -- 2) Attempted removal of the club (DELETE FROM Club)
+            DELETE FROM Club
+            WHERE ClubId = @ClubId
+            -- !! Check if there's a problem
+            IF @@ERROR <> 0 OR @@ROWCOUNT = 0 
+            BEGIN
+                RAISERROR('Unable to remove the club', 16, 1)
+                ROLLBACK TRANSACTION
+            END
+            ELSE
+            BEGIN
+                -- At this point, we've done all our DML tasks and 
+                -- there are no problems
+                COMMIT TRANSACTION  -- Tells the database to make the changes permanent
+            END
+        END
+    END
+GO
 
 -- 3. Add a stored procedure called AdjustMarks that takes in a course ID. The procedure should adjust the marks of all students for that course by increasing the mark by 10%. Be sure that nobody gets a mark over 100%.
 GO
