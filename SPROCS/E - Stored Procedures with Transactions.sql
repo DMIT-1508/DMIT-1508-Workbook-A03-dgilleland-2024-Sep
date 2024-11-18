@@ -159,7 +159,7 @@ CREATE PROCEDURE AdjustMarks
     @CourseID   char(7)
 AS
     -- Body of procedure here
-    -- Step 0) Validation
+    -- Step 0) Validation - You can combine all your NULL checks here
     IF @CourseID IS NULL
     BEGIN
         RAISERROR('CourseID cannot be null', 16, 1)
@@ -168,23 +168,20 @@ AS
     BEGIN
         BEGIN TRANSACTION -- Don't forget this....
         -- Step 1) Deal with those who "could" get 100%+ by just giving them 100%
-        -- You can use PRINT() statements temporarily as a way to see what stage/step is run when you test the SPROC
-	-- BUT you must REMEMBER TO REMOVE THE PRINT STATEMENTS in your final version of the stored procedure
-        PRINT('Step 1 - Update Registration...') -- Will output in the messages window
+
         UPDATE Registration
            SET Mark = 100            -- the max mark possible
         WHERE  CourseId = @CourseID
           AND  Mark * 1.1 > 100      -- whereever adding 10% would give more than 100% of a final mark
+
         IF @@ERROR > 0 -- Errors only - it's ok to have zero rows affected
         BEGIN
-            PRINT('RAISERROR + ROLLBACK')
             RAISERROR('Problem updating marks', 16, 1)
             ROLLBACK TRANSACTION
         END
         ELSE
         BEGIN
             -- Step 2) Raise all the other marks
-            PRINT('Step 2 - Update Registration...')
             UPDATE Registration
                SET Mark = Mark * 1.1
             WHERE  CourseId = @CourseID
@@ -192,7 +189,6 @@ AS
 
             IF @@ERROR > 0 -- Errors only
             BEGIN
-                PRINT('RAISERROR + ROLLBACK')
                 RAISERROR('Problem updating marks', 16, 1)
                 ROLLBACK TRANSACTION
             END
@@ -205,6 +201,23 @@ AS
 
 RETURN
 GO
+
+/* Test the AdjustMarks stored procedure
+SELECT  CourseId, StudentId, Semester, Mark 
+FROM    Registration
+WHERE   CourseId = 'DMIT152'
+
+-- Call my sproc with the 'DMIT152' course and then look at the results
+EXEC AdjustMarks 'DMIT152'
+
+SELECT  CourseId, StudentId, Semester, Mark 
+FROM    Registration
+WHERE   CourseId = 'DMIT152'
+
+-- Test with "bad data"
+EXEC AdjustMarks NULL
+*/
+
 
 -- 4. Create a stored procedure called RegisterStudent that accepts StudentID, CourseID and Semester as parameters. If the number of students in that course and semester are not greater than the Max Students for that course, add a record to the Registration table and add the cost of the course to the students balance. If the registration would cause the course in that semester to have greater than MaxStudents for that course raise an error.
 GO
@@ -228,8 +241,13 @@ AS
         DECLARE @CurrentCount   smallint
         DECLARE @CourseCost     money
         -- Assign a value to each of the local variables
-        SELECT @MaxStudents = MaxStudents FROM Course WHERE CourseId = @CourseID
+        -- I can use the SET statement to grab the # of students allowed in the course
+        SET @MaxStudents = (SELECT MaxStudents FROM Course WHERE CourseId = @CourseID)
+        --  \ variable / = \ produces a single value (one row, one column)           /
+
+        -- I can use a SELECT statement to grab the current # of students in the course
         SELECT @CurrentCount = COUNT (StudentID) FROM Registration WHERE CourseId = @CourseID AND Semester = @Semester
+
         SELECT @CourseCost = CourseCost FROM Course WHERE CourseId = @CourseID
 
         IF @MaxStudents >= @currentcount 
@@ -290,9 +308,9 @@ AS
     ELSE
     BEGIN
         IF NOT EXISTS(SELECT StudentID FROM Student
-                      WHERE  StudentID = @StudentID
-                        AND  FirstName = @First
-                        AND  LastName = @Last
+                      WHERE  StudentID = @StudentID -- This is the PK - there should only be ONE row
+                        AND  FirstName = @First     -- all these others are to make sure we
+                        AND  LastName = @Last       -- truely have the correct person
                         AND  Gender = @Gender
                         AND  Birthdate = @Birthdate)
         BEGIN

@@ -274,17 +274,17 @@
 
 ### Nov 18
 
-- [ ] Stored Procedures
+- [ ] Stored Procedures - *Last of the Transactions*
 
 
 ### Nov 20
 
-- [ ] *TBD*
+- [ ] *Review Quiz 2*
 
 
 ### Nov 21
 
-- [ ] *TBD*
+- [ ] *Lab Time*
 
 ----
 
