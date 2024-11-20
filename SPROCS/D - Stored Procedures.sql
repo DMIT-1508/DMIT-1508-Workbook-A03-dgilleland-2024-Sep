@@ -78,7 +78,13 @@ AS
     END   -- }
 RETURN
 GO
-
+-- sp_help Position
+-- SELECT * FROM Position
+-- SELECT @@IDENTITY
+-- INSERT INTO Position(PositionDescription)
+-- VALUES ('Substitute Teacher')
+-- VALUES('Demo')
+-- VALUES (NULL)
 -- Let's review what would happen with @@IDENTITY from
 -- direct INSERTs to the database table
 INSERT INTO Position(PositionDescription)  VALUES (NULL)
