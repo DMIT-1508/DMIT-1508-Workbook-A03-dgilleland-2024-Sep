@@ -295,7 +295,13 @@
 
 ### Nov 27
 
-- [ ] Triggers
+- [ ] *Review Lab 3 Solution*
+- [ ] *Comments on Quiz 3*
+  - 4 questions:
+    - Add
+    - Update
+    - Query
+    - Transaction
 
 
 ### Nov 28
