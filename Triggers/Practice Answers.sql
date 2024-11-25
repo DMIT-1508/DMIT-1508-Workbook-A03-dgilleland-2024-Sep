@@ -55,6 +55,29 @@ AS
     END
 GO
 
+-- Now, let's have a student register in a lot of courses and see if the trigger's rollback gets fired.
+-- First I need to find a student that I can add to courses...
+SELECT * FROM STUDENT WHERE StudentId NOT IN (SELECT StudentId FROM Registration)
+-- From this, I will select 200494476 (Joe Cool), and add them to some courses
+SELECT * FROM Course
+-- DMIT101, DMIT103, DMIT104, DMIT115, DMIT152, DMIT163, DMIT168, DMIT170, DMIT172, DMIT175, DMIT215
+EXEC RegisterStudent 200494476, 'DMIT101', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT103', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT104', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT115', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT152', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT163', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT168', '2024S'
+-- check balance...
+SELECT [StudentID],[FirstName],[LastName],[BalanceOwing]
+FROM Student WHERE StudentID = 200494476
+EXEC RegisterStudent 200494476, 'DMIT170', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT172', '2024S'
+EXEC RegisterStudent 200494476, 'DMIT175', '2024S'
+-- THIS ONE should trigger the rejection
+EXEC RegisterStudent 200494476, 'DMIT215', '2024S'
+
+
 -- 5. The school has placed a temporary hold on the creation of any more clubs. (Existing clubs can be renamed or removed, but no additional clubs can be created.) Put a trigger on the Clubs table to prevent any new clubs from being created.
 DROP TRIGGER IF EXISTS Club_Insert_Lockdown
 GO
