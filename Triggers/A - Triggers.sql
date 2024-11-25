@@ -1,5 +1,5 @@
 -- Triggers Samples
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -19,21 +19,24 @@ GO
 DROP TRIGGER IF EXISTS Activity_DML_Diagnostic
 GO
 
-CREATE TRIGGER Activity_DML_Diagnostic
+CREATE OR ALTER TRIGGER Activity_DML_Diagnostic
 ON Activity -- Part of the Activity table
 FOR Insert, Update, Delete -- Show diagnostics of the Activity/inserted/deleted tables
 AS
     -- Body of Trigger - Echo back the trigger context
-    SELECT 'Activity Table:', StudentID, ClubId FROM Activity ORDER BY StudentID
-    SELECT 'Inserted Table:', StudentID, ClubId FROM inserted ORDER BY StudentID
+    SELECT 'Activity Table:' AS 'Source Table', StudentID, ClubId FROM Activity -- ORDER BY StudentID
+    UNION
+    SELECT 'Inserted Table:', StudentID, ClubId FROM inserted -- ORDER BY StudentID
+    UNION
     SELECT 'Deleted Table:', StudentID, ClubId FROM deleted ORDER BY StudentID
 RETURN
 GO
 -- Demonstrate the diagnostic trigger
 SELECT * FROM Activity
 SELECT * FROM Club
+SELECT * FROM Student
 -- Note to self: make sure you have the CIPS club from the INSERT demo
-INSERT INTO Activity(StudentID, ClubId) VALUES (200494476, 'CIPS')
+INSERT INTO Activity(StudentID, ClubId) VALUES (200494476, 'CIPS') -- Joe Cool
 -- (note: generally, it's not a good idea to change a primary key, even part of one)
 UPDATE Activity SET ClubId = 'NASA1' WHERE StudentID = 200494476
 DELETE FROM Activity WHERE StudentID = 200494476
@@ -53,7 +56,8 @@ AS
        EXISTS (SELECT A.StudentID FROM Activity AS A
                -- The next line ensures we are only dealing with students
                -- affected by the INSERT/UPDATE
-               INNER JOIN inserted AS i ON A.StudentID = i.StudentID
+               INNER JOIN inserted AS i     -- This inserted table represents the new data
+                    ON A.StudentID = i.StudentID
                GROUP BY A.StudentID HAVING COUNT(A.StudentID) > 3)
     BEGIN
         -- State why I'm going to abort the changes
@@ -65,8 +69,8 @@ RETURN
 GO
 
 /*  The following will list all the triggers in my database
-SELECT  t.name AS TableName,
-        tr.name AS TriggerName  
+SELECT  t.name AS 'TableName',
+        tr.name AS 'TriggerName'
 FROM sys.triggers AS tr
     INNER JOIN sys.tables AS t
         ON t.object_id = tr.parent_id
@@ -123,8 +127,8 @@ UPDATE Course SET CourseCost = CourseCost * 1.21
 UPDATE Course SET CourseCost = CourseCost * 1.195
 
 -- 3. Too many students owe us money and keep registering for more courses! Create a trigger to ensure that a student cannot register for any more courses if they have a balance owing of more than $5000.
--- Q) What table should the trigger belong to?
--- Q) What DML statement(s) should launch the trigger?
+-- Q) What table should the trigger belong to? - Registration
+-- Q) What DML statement(s) should launch the trigger? - INSERT
 GO
 DROP TRIGGER IF EXISTS Registration_Insert_BalanceOwing
 GO

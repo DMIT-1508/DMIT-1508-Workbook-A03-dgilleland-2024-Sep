@@ -1,6 +1,6 @@
 /* Answers to Practice Triggers Questions
  *************************************************/
-USE [A0X-School]
+USE [A03-School]
 GO
 SELECT DB_NAME() AS 'Active Database'
 GO
@@ -10,6 +10,49 @@ GO
    ------------------------------- */
 -- 3.b. TODO: Write code to test this trigger by creating a stored procedure called RegisterStudent that puts a student in a course and then increases the balance owing by the cost of the course.
 SELECT * FROM Student WHERE BalanceOwing > 0
+-- sp_help Registration
+GO
+CREATE OR ALTER PROCEDURE RegisterStudent
+    @StudentID      int,
+    @CourseId       char(7),
+    @Semester       char(5)
+AS
+    IF @StudentID IS NULL OR @CourseId IS NULL OR @Semester IS NULL
+    BEGIN
+        RAISERROR('StudentId, CourseId and Semester are required', 16, 1)
+    END
+    ELSE
+    BEGIN
+        BEGIN TRANSACTION
+
+        INSERT INTO Registration(StudentID, CourseId, Semester)
+        VALUES (@StudentID, @CourseId, @Semester)
+
+        IF @@ERROR <> 0
+        BEGIN
+            RAISERROR('Unable to register student in course', 16, 1)
+            ROLLBACK TRANSACTION
+        END
+        ELSE
+        BEGIN
+            DECLARE @Cost   money
+            SET @Cost = (SELECT CourseCost FROM Course WHERE CourseId = @CourseId)
+
+            UPDATE  Student
+            SET     BalanceOwing = BalanceOwing + @Cost
+            WHERE   StudentID = @StudentID
+
+            IF @@ERROR <> 0
+            BEGIN
+                RAISERROR('Unable to charge student for course registration', 16, 1)
+                ROLLBACK TRANSACTION
+            END
+            ELSE
+            BEGIN
+                COMMIT TRANSACTION
+            END
+        END
+    END
 GO
 
 -- 5. The school has placed a temporary hold on the creation of any more clubs. (Existing clubs can be renamed or removed, but no additional clubs can be created.) Put a trigger on the Clubs table to prevent any new clubs from being created.
