@@ -328,12 +328,12 @@
 
 ### Dec 9
 
-- [ ] *TBD*
+- [ ] *Review Lab 4 Solution*
 
 
 ### Dec 11
 
-- [ ] **Quiz 3**
+- [ ] **Quiz 4**
 
 
 ### Dec 12
@@ -341,6 +341,10 @@
 - [ ] *TBD*
 
 ----
+
+### Dec 16
+
+- [ ] *Q & A*
 
 <!--
 ## TENTATIVE SCHEDULE
