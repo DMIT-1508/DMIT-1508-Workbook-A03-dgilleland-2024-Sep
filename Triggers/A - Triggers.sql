@@ -176,7 +176,7 @@ DROP TRIGGER IF EXISTS Activity_PreventUpdate
 GO
 
 CREATE TRIGGER Activity_PreventUpdate
-ON Activity
+ON Activity     -- This table has only two columns, both as part of the PK
 FOR UPDATE
 AS
     IF @@ROWCOUNT > 0 -- No need to check anything else because the only columns
@@ -190,10 +190,33 @@ AS
     END
 RETURN
 GO
+/* Test my trigger Activity_PreventUpdate
+    SELECT * FROM Activity ORDER BY ClubId
+    UPDATE  Activity
+    SET     ClubId = 'NASA1'
+    WHERE   ClubId = 'CHESS'
+      AND   StudentID = 200495500
+*/
 
 -- 5. The school has placed a temporary hold on the creation of any more clubs. (Existing clubs can be renamed or removed, but no additional clubs can be created.) Put a trigger on the Clubs table to prevent any new clubs from being created.
 -- TODO: Student Answer Here
-
+-- Q) What table should the trigger belong to? - Club
+-- Q) What DML statement(s) should launch the trigger? - INSERT
+CREATE OR ALTER TRIGGER Club_Insert
+ON  Club
+FOR INSERT
+AS
+    IF @@ROWCOUNT > 0 -- @@ROWCOUNT refers to the # of rows in inserted/deleted 
+    BEGIN
+        RAISERROR('Inserts are currently blocked for clubs', 16, 1)
+        ROLLBACK TRANSACTION
+    END
+GO
+/*
+    sp_help Club
+    INSERT INTO Club(ClubId, ClubName)
+    VALUES ('Party', 'Celebrate birthdays')
+*/
 
 -- 6. Our school DBA has suddenly disabled some Foreign Key constraints to deal with performance issues! Create a trigger on the Registration table to ensure that only valid CourseIDs, StudentIDs and StaffIDs are used for grade records. (You can use sp_help tablename to find the name of the foreign key constraints you need to disable to test your trigger.) Have the trigger raise an error for each foreign key that is not valid. If you have trouble with this question create the trigger so it just checks for a valid student ID.
 -- sp_help Registration -- then disable the foreign key constraints....
@@ -216,8 +239,10 @@ AS
         -- has changed).
         DECLARE @LocalError bit = 0
 
-        IF UPDATE(StudentID) AND
-           NOT EXISTS (SELECT * FROM inserted AS I INNER JOIN Student AS S ON I.StudentID = S.StudentID)
+        -- If the data in the StudentID column is updated (changed)...
+        IF  UPDATE(StudentID) AND
+            -- and the corresponding StudentID doesn't exist in the Student table
+            NOT EXISTS (SELECT * FROM inserted AS I INNER JOIN Student AS S ON I.StudentID = S.StudentID)
         BEGIN
             RAISERROR('That is not a valid StudentID', 16, 1)
             SET @LocalError = 1
@@ -245,8 +270,33 @@ AS
 RETURN
 GO
 
--- How would you test the trigger?
+-- How would you test the trigger? What I want to know is, will it detect bad data
+-- in the StudentID, CourseID or StaffID columns when data is inserted/updated for
+-- the Registration table.
+-- sp_help Registration
+--  StudentID int
+--  CourseId  char(7)
+--  StaffID   smallint
+
 -- TODO: Student Answer Here...
+-- a) Look for an existing registration to modify
+--    SELECT StudentID, CourseID, Semester, StaffID FROM Registration
+UPDATE  Registration
+SET     StaffID = 312 -- obviously a bad StaffID value
+WHERE   StudentID = 199899200
+  AND   CourseId = 'DMIT152'
+  AND   Semester = '2004J'
+-- b) Insert a new row of (bad) data
+INSERT INTO Registration(StudentID, CourseId, Semester, StaffID)
+VALUES (1234, 'PROG777', '2025J', 400)
+
+INSERT INTO Registration(StudentID, CourseId, Semester, StaffID)
+VALUES (199899200, 'PROG777', '2025J', 400)
+
+-- c) Make sure that good data is accepted
+INSERT INTO Registration(StudentID, CourseId, Semester, StaffID)
+VALUES (199899200, 'DMIT152', '2025J', 3)
+GO
 
 -- 7. Our network security officer suspects our system has a virus that is allowing students to alter their balance owing records! In order to track down what is happening we want to create a logging table that will log any changes to the balance owing in the Student table. You must create the logging table and the trigger to populate it when the balance owing is modified.
 -- Step 1) Make the logging table
@@ -275,10 +325,17 @@ AS
     --                    \ Function         /
     --                     \  Returns true if that column's data changed
 	BEGIN
+        -- Log the changes into my auditing table
 	    INSERT INTO BalanceOwingLog (StudentID, ChangedateTime, OldBalance, NewBalance)
-	    SELECT I.StudentID, GETDATE(), d.BalanceOwing, i.BalanceOwing
+	    SELECT  I.StudentID,        -- ID of the student(s)
+                GETDATE(),          -- When this change is happening
+                d.BalanceOwing,     -- Old value for the balance
+                i.BalanceOwing      -- New value for the balance
         FROM deleted AS d 
-            INNER JOIN inserted AS i on d.StudentID = i.StudentID
+            INNER JOIN inserted AS i
+                ON d.StudentID = i.StudentID
+        
+        -- If I'm unable to log the information, then just do a rollback
 	    IF @@ERROR <> 0 
 	    BEGIN
 		    RAISERROR('Insert into BalanceOwingLog Failed',16,1)
