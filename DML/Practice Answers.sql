@@ -75,14 +75,14 @@ WHERE  CourseId = 'DMIT152'
 -- TODO: Student Answer Here...
 UPDATE StudentGrades
 SET    Mark = 90
-WHERE  StudentID = '199899200'
+WHERE  StudentID = 199899200
   AND  CourseId = 'DMIT152'
 
 --10. Using the StudentGrades view, see if you can delete the same record from the previous question.
 --    If it doesn't work, then copy the error message here.
 -- TODO: Student Answer Here...
 DELETE StudentGrades
-WHERE  StudentID = '199899200'
+WHERE  StudentID = 199899200
   AND  CourseId = 'DMIT152'
 -- Msg 4405, Level 16, State 1, Line 1
 -- View or function 'StudentGrades' is not updatable because the modification affects multiple base tables.
